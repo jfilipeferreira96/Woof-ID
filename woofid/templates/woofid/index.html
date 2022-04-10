@@ -1,0 +1,200 @@
+{% extends "woofid/layout.html" %}
+{% load static %}
+{% load custom_tags%}
+
+{% block navbar %}
+    <div class="mr-auto">
+        <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+          
+          <li class="nav-item">
+              <a href="#howitworks" class="nav-link">How it works</a>
+          </li>
+          <li class="nav-item">
+              <a href="#reviews" class="nav-link">Reviews</a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+              <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+          </li>
+          <li class="nav-item">
+              <a href="{% url 'logout' %}" class="nav-link">Log out</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+              <a href="{% url 'login' %}" class="nav-link">Log in</a>
+          </li>
+          {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block main %}
+<!-- ------- First Section ---------- -->
+    <section class="pt-140 pb-60" id="home">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+
+            <div class="header-hero-content">
+              <h1 class="header-title"><span>An Extra Step</span> To Ensure Your's Pet Safety</h1>
+              <p class="text">Let's get your pet home as fast as possible! Create a page for your pet contaning the information on how to return them back to you such like. All associated with a unique pin code on your pet's collar.</p>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="">
+              <img src="{% static 'woofid/img/good-doggy.svg' %}" alt="" class="app">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- ------- End of the First Section ---------- -->
+
+  <!-- ------- Feature Section Start ---------- -->
+  <section class="feature-section pt-80 pb-40" id="howitworks">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-6 col-lg-7">
+            <div class="section-title text-center mb-30">
+              <h1>How it <span> Works</span></h1>
+              <p class="wow">Woof ID increases the chances that a lost pet will be immediately reunited with its owner.</p>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-4 d-flex align-items-stretch">
+            <div class="single-feature ">
+              <div class="icon color-1">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="content">
+                <h3>Create your Account</h3>
+                <p>Create your Woof ID account and create your pet profile(s).
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 d-flex align-items-stretch">
+            <div class="single-feature wow" >
+              <div class="icon color-2">
+                <i class="fas fa-address-card"></i>
+              </div>
+              <div class="content">
+                <h3>Activate your Woof ID</h3>
+                <p>Activate the Woof ID that you purchased and create your pet's profile.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 d-flex align-items-stretch">
+            <div class="single-feature wow">
+              <div class="icon color-3">
+                <i class="fas fa-hand-pointer"></i>
+              </div>
+              <div class="content">
+                <h3>Easy Access</h3>
+                <p>Done! You have increased the chances of reuniting with your pet.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ------- Feature Section End ---------- -->
+
+    <!-- ----------- About Section Start --------- -->
+    <section class="about-area pt-110 pb-120" data-scroll-index="2">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="about-image">
+              <div class="about-shape"></div>
+              <img src="{% static 'woofid/img/about-app.png' %}" alt="" class="app">
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="about-content mt-50">
+              <div class="section-title">
+                <h1 class="title">Easy access to the owners information</h1>
+                <p class="text">It's trully simple. If someone finds your pet wearing Woof ID collar, all it takes is to access this website and enter the Collar ID.
+                With these two steps they will be able to access all the owner's information, including address, phone number, identification pictures of your pet and much more.
+                </p>
+              </div>
+              <a href="{% url 'get_me_home' %}" class="main-btn">Find the Owner</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ----------- About Section End --------- -->
+    <!-- ----------- Testimonial Section Start ------- -->
+    <section class="testimonial-section" id="reviews">
+      <figure class="top-0 left-0 w-100 d-none d-md-block mt-n3" style="margin-top: -7.3rem !important;">
+        <svg class="fill-soft" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 43.4"  xml:space="preserve"><path d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"></path></svg>
+      </figure>
+      <div class="container">
+        <div class="row justify-content-center testimonial-active-wrapper">
+          <div class="col-xl-6 col-lg-7">
+            <div class="section-title text-center mb-60">
+              <h1 class="mb-25" >Customer Reviews</h1>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Ipsum, repudiandae pariatur deserunt explicabo repellat voluptatibus.</p>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-xl-7 col-lg-8">
+              <div class="testimonial-active">
+                <div class="testimonial-wrapper">
+                  <div class="single-testimonial">
+                    <div class="info">
+                      <div class="image-2">
+                        <img src="{% static 'woofid/img/customer-1.jpg' %}" alt="Customer">
+                      </div>
+                      <h4>John John</h4>
+                      <div class="quote">
+                        <i class="fas fa-quote-right"></i>
+                      </div>
+                      <div class="content mt-3">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet beatae officia minus
+                          voluptatibus veritatis unde, asperiores laboriosam tempore voluptates debitis.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <!-- ----------- Testimonial Section End ------- -->
+{% endblock %}
+
+
+{% block footer %}
+
+  <footer class="footer mt-auto py-5 pt-lg-6" >
+      <figure class="top-0 left-0 w-100 d-none d-md-block mt-n3" style="margin-top: -3.5rem !important;">
+        <svg class="fill-soft" style="transform: rotate(180deg);" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 43.4"  xml:space="preserve"><path d="M0,23.3c0,0,405.1-43.5,697.6,0c316.5,1.5,108.9-2.6,480.4-14.1c0,0,139-12.2,458.7,14.3 c0,0,67.8,19.2,283.3-22.7v35.1H0V23.3z"></path></svg>
+      </figure>
+      <div class="container ">
+        <hr class="bg-light my-2">
+        <div class="row pt-2 pt-lg-5" style="border-top: 2px solid #747e88;">
+          <div class="col mb-md-0">
+            <div class="d-flex text-center justify-content-center align-items-center" >
+              <p class="font-weight-normal font-small mb-0">Copyright © <a href="https://github.com/jfilipeferreira96" target="_blank">J. Filipe 2022</a>. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sticky-right">
+        <a href="#home" class="icon icon-primary icon-md btn btn-icon-only btn-white border border-soft shadow-soft">
+            <span class="fas fa-chevron-up"></span>
+        </a>
+    </div>
+  </footer>
+    
+{% endblock %}

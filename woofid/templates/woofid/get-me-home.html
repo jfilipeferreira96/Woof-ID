@@ -1,0 +1,47 @@
+{% extends "woofid/layout.html" %}
+{% load static %}
+{% load custom_tags%}
+
+{% block title %}Get me Home{% endblock %}
+
+{% block navbar %}
+    <div class="mr-auto">
+      <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+              <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+          </li>
+          <li class="nav-item">
+              <a href="{% url 'logout' %}" class="nav-link">Log out</a>
+          </li>
+          {% else %}
+          <li class="nav-item d-xl-none">
+              <a href="{% url 'index' %}" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+              <a href="{% url 'login' %}" class="nav-link">Log in</a>
+          </li>
+          {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block main %}
+    <section class="d-flex align-items-center" id="getmehome" style="min-height: 100vh;">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 text-center">
+            <form method="post">
+                {% csrf_token %}
+                <h1 class="title"><span>Insert</span> the Woof ID</h1>
+                <p>Please, enter the pin present on the collar of the animal that you found.</p>
+                <input type="text" id="woofid_input" maxlength='7' autocomplete="off">
+                <button type="submit" class="btn btn-lg btn-submit mt-4">Find the Owner</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}
+

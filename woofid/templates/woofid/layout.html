@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}Woof ID{% endblock %}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" type="image/png" href="{% static 'woofid/img/favicon.png' %}"/>
+    <link href="{% static 'woofid/main.css' %}" rel="stylesheet">
+
+</head>
+<body>
+  
+  <!-------   Header star ------>
+  <header class="header-area">
+    <div class="navbar-area">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="container position-relative">
+
+            <a class="navbar-brand mr-lg-4 d-none d-lg-block" href="{% url 'index' %}">
+              <img src="{% static 'woofid/img/petslogo.png' %}" style="width:80px" alt="logo">
+            </a>
+            <div class="collapse navbar-collapse navbar-menu" id="navbar_global">
+              {% block navbar %}
+              
+              {% endblock %}
+              
+            </div>
+            <div class="d-flex align-items-center">
+              {% if user.is_authenticated %}
+              <a href="{% url 'authentication' %}" class="btn btn-outline-soft mx-3 d-none d-xl-block">Activate Woof ID</a> 
+              {% else %}
+              <a href="{% url 'login' %}" class="btn btn-outline-soft mx-3 d-none d-xl-block ">Activate Woof ID</a> 
+              {% endif %}
+              <a href="{% url 'get_me_home' %}" class="btn btn-md btn-tertiary text-white">Bring Me Home <i class="fas fa-home ml-2"></i></a> 
+            </div>
+            <div class="navbar-right d-flex flex-nowrap">
+                <button class="navbar-toggler ml-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+    <!-- navbar end-->
+  
+  
+  <main class="main">
+      <div class="row">
+        <!-- Toasts-->
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="position-fixed bottom-0 end-0 p-3">
+                <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast-success">
+                    <div class="d-flex">
+                        <div class="toast-body toast-success-content">
+                            
+                        </div>
+                        <button type="button" class="btn-close btn-close-white m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Toasts-->
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="position-fixed bottom-0 end-0 p-3">
+                <div class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" id="toast-error">
+                    <div class="d-flex">
+                        <div class="toast-body toast-error-content">
+                            
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block main %}
+  
+    {% endblock %}
+  </main>
+  
+{% block footer %}
+{% endblock %}
+
+  
+  
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="{% static 'woofid/main.js'%}"></script>
+</html>
