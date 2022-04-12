@@ -35,19 +35,63 @@ def get_me_home(request):
 
 @login_required(login_url="/login")
 def profile(request):
-    
-    total_pet_profiles = Pet.objects.filter(
-        account=User.objects.get(pk=request.user.id)).count()
+    if request.method == "POST":
+
+        body = json.loads(request.body.decode('utf-8'))
+        try:
+            #trying to save the form 
+            pet =Pet(pet_name=body['pet_name'], image=body['image'], owner=body['owners_name'], country=body['country'], zip_code= body['zip'], address=body['address'], phone=body['phone'], email=body['email'], additional=body['additional'], account=User.objects.get(pk=request.user.id))
+            pet.save()
+
+            #associating the WOOFTAG/ID to the PET created
+            WoofTag.objects.filter(woofid__iexact=body['woofid'], user=User.objects.get(pk=request.user.id)).update(pet=Pet.objects.filter(pet_name=body['pet_name']).order_by('-id')[0])
+
+            return JsonResponse({"message": "Success"}, status=201)
+        except Pet.DoesNotExist:
+            return JsonResponse({"message": "Error"})
+
+
+    user_pets = Pet.objects.filter(
+        account=User.objects.get(pk=request.user.id))
+
+    total_pet_profiles = user_pets.count()
 
     total_woof_ids = WoofTag.objects.filter(
         user=User.objects.get(pk=request.user.id)).count()
 
     return render(request, "woofid/profile.html", {
         "total_pet_profiles": total_pet_profiles,
-        "total_woof_ids": total_woof_ids
+        "total_woof_ids": total_woof_ids,
+        "user_pets": user_pets
 
-            
     })
+
+@login_required(login_url="/login")
+def profile_keys(request):
+    if request.method == "GET":
+        
+        payload = WoofTag.objects.filter(
+        user=User.objects.get(pk=request.user.id)).values('woofid')
+        result_list = list(payload)
+        
+        return JsonResponse({"message": "Success", "result_list": result_list})
+    else:
+        return JsonResponse({"message": "Error"})
+
+@login_required(login_url="/login")
+def available_keys(request):
+    if request.method == "GET":
+        
+        payload = WoofTag.objects.filter(
+        user=User.objects.get(pk=request.user.id), pet__isnull=True).values('woofid')
+
+        result_list = list(payload)
+        
+        return JsonResponse({"message": "Success", "result_list": result_list})
+    else:
+        return JsonResponse({"message": "Error"})
+
+
 
 @login_required(login_url="/login")
 def authentication(request):

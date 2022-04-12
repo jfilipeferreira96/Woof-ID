@@ -75,6 +75,9 @@ html {
 .pb-60 {
   padding-bottom: 60px;
 }
+.mt-140 {
+  margin-top: 140px;
+}
 
 img {
   max-width: 100%;
@@ -523,7 +526,10 @@ span {
   background-color: #fff;
   border-radius: inherit;
 }
-
+#info .info {
+  position: relative;
+  margin-top: -80px;
+}
 .testimonial-section .single-testimonial .info .image-2 {
   width: 100%;
   max-width: 65px;
@@ -793,6 +799,9 @@ footer a:hover {
     padding-top: 0px;
     padding-bottom: 60px;
   }
+  #profiles_row {
+    margin-top: 50px;
+  }
 }
 
 @media (max-width: 470px) {
@@ -803,4 +812,58 @@ footer a:hover {
 
 .bg-danger {
   background-color: #fb4040 !important;
+}
+
+#arrow {
+  border-right: 2px solid #38424d;
+  border-bottom: 2px solid #38424d;
+  width: 10px;
+  height: 10px;
+  transform: rotate(-45deg);
+  margin-top: 40px;
+}
+
+#checkYourIDsModal ul li {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+#checkYourIDsModal ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+#checkYourIDsModal ul li:before {
+  content: "";
+  position: absolute;
+  border-right: 2px solid #38424d;
+  border-bottom: 2px solid #38424d;
+  width: 10px;
+  height: 10px;
+  top: calc(50% - 4px);
+  left: -20px;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+#woof_not_activated .warning {
+  color: #fc6666;
+  font-weight: 600;
+}
+#woof_not_activated .available {
+  color: #38424d;
+  font-weight: 600;
+}
+
+.round-profile img {
+  max-width: 220px;
+  height: auto;
+  max-height: 200px;
+  width: 100%;
+  margin: 0 auto;
+  -webkit-transform: translate3d(0, -50%, 0);
+  -moz-transform: translate3d(0, -50%, 0);
+  -o-transform: translate3d(0, -50%, 0);
+  -ms-transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -50%, 0);
+  box-shadow: 0 5px 15px -8px rgb(0 0 0 / 24%), 0 8px 10px -5px rgb(0 0 0 / 20%);
 }

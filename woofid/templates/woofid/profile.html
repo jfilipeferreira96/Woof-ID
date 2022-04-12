@@ -60,8 +60,38 @@
         </section>
 
           <!-- Pets profile section-->
-          <div class="row">
-
+          <div class="row mt-140" id="profiles_row">
+            {% for pet in user_pets %}
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-4 col-xs-12">
+                  <div class="testimonial-active">
+                    <div class="testimonial-wrapper">
+                      <div class="single-testimonial">
+                        <div class="section-title text-center">
+                          <div class="round-profile">
+                          <img src="{% static 'woofid/media/' %}{{pet.image}}.jpg" alt="Circle Image Pet" class="pet-image rounded-circle img-fluid">
+                          </div>
+                        <div class="info">
+                          <h4 id="pets_name">{{pet.pet_name}}</h4>
+                          <div class="text-center content mt-3">
+                            <p><i class="fas fa-user-alt mx-2"></i>{{pet.owner}}</p>
+                            <p><i class="fa fa-phone mx-2"></i>{{pet.phone}}</p>
+                            <p><i class="fa fa-envelope mx-2"></i>{{pet.email}}</p>
+                            <p><i class="fa fa-map-marker-alt mx-2"></i>{{pet.address}} - {{pet.zip_code}}, {{pet.country}}</p>
+                            <p class="">{{pet.additional}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="text-center">
+              <h1>It seems like you have<span> no pets.</span></h1>
+            </div>
+            {% endfor %}
           </div>
 
         </div>
@@ -75,34 +105,44 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form method="POST">
+              <form id="submit_form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
                   <div class="form-group row">
-                    <label for="inputEmail3" class="col-sm-3 col-form-label">Pet Name</label>
+                    <label class="col-sm-3 col-form-label">Pet Name</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="petName" name="petName" required>
+                      <input type="text" autocomplete="off" class="form-control" id="petName" name="petName" required>
                     </div>
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-3 col-form-label">Pet Photo</label>
+                    <label class="col-sm-3 col-form-label">Pet Photo</label>
                     <div class="col-sm-9">
                        <input type="file" class="form-control-file" id="photoUpload" name="photoUpload" required>
                     </div>
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-3 col-form-label">Owners Name</label>
+                    <label class="col-sm-3 col-form-label">Woof ID</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="ownerName"  name="ownerName" required>
+                      <select class="form-select" id="woof_not_activated" name="woof_not_activated"  required>
+                        
+                      </select>
                     </div>
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-3 col-form-label">Country</label>
+                    <label class="col-sm-3 col-form-label">Owners Name</label>
+                    <div class="col-sm-9">
+                      <input type="text" autocomplete="off" class="form-control" id="ownerName"  name="ownerName" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Country</label>
                     <div class="col-sm-9">
                       {% get_countries as countries %}
                       <select class="form-select"  id="country"  name="country"  required>
-                        <option selected>Select your country</option>
+                        <option value="" disabled selected>Select your country</option>
                         {% for country in countries %}
                             <option value="{{ country.name }}">{{ country.name }}</option>
                         {% endfor %}
@@ -111,46 +151,45 @@
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-3 col-form-label">Zip/Postal Code</label>
+                    <label class="col-sm-3 col-form-label">Zip/Postal Code</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="zip"  name="zip"  required>
+                      <input type="text" autocomplete="off" class="form-control" id="zip"  name="zip"  required>
                     </div>
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-3 col-form-label">Street Address</label>
+                    <label class="col-sm-3 col-form-label">Street Address</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="address"  name="address"  required>
+                      <input type="text" autocomplete="off" class="form-control" id="address"  name="address"  required>
                     </div>
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-3 col-form-label">Phone Number</label>
+                    <label class="col-sm-3 col-form-label">Phone Number</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" id="phoneNumber"  maxlength="14" name="phoneNumber"  required>
+                      <input type="text" autocomplete="off" class="form-control" id="phoneNumber"  maxlength="14" name="phoneNumber"  required>
                     </div>
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-3 col-form-label">Email address</label>
+                    <label class="col-sm-3 col-form-label">Email address</label>
                     <div class="col-sm-9">
                       <input type="email" class="form-control" id="email"  name="email" required>
                     </div>
                   </div>
 
                   <div class="form-group row mt-2">
-                    <label for="inputPassword3" class="col-sm-12 col-form-label">Information</label>
+                    <label class="col-sm-12 col-form-label">Information</label>
                     <div class="col-sm-12">
-                      <textarea id="addInformation" cols="10" rows="5" placeholder="Addiotional information" name="addInformation" class="form-control" style="min-width: 100%"></textarea>
+                      <textarea id="addInformation" autocomplete="off" cols="10" rows="5" placeholder="Addiotional information" name="addInformation" class="form-control" style="min-width: 100%"></textarea>
                     </div>
                   </div>
-                  
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-main text-white">Create</button>
-              <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Close</button>
-            </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-main text-white">Create</button>
+                    <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </form>
           </div>
         </div>
       </div>
@@ -164,7 +203,9 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              ...
+              <ul id="list_of_woofs_ids">
+
+              </ul>
             </div>
             <div class="modal-footer">
               <!--<button type="button" class="btn btn-outline-main text-white">Create</button>-->

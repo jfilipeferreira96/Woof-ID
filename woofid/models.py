@@ -14,7 +14,7 @@ class User(AbstractUser):
 
 class Pet(models.Model):
     pet_name = models.CharField(max_length=32, blank=False)
-    image = models.ImageField(upload_to="media/",default='media/default.jpg')
+    image = models.ImageField(upload_to="media/",default='static/media/default.jpg')
     owner = models.CharField(max_length=32, blank=False)
     country = CountryField()
     zip_code = models.CharField(max_length=10, blank=False)
