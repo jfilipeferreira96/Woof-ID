@@ -867,3 +867,35 @@ footer a:hover {
   transform: translate3d(0, -50%, 0);
   box-shadow: 0 5px 15px -8px rgb(0 0 0 / 24%), 0 8px 10px -5px rgb(0 0 0 / 20%);
 }
+
+.card-sl {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card-image img {
+  max-height: 100%;
+  max-width: 100%;
+  border-radius: 8px 8px 0px 0;
+}
+.card-button {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  width: 100%;
+  background-color: #38424d;
+  color: #fff;
+  border-radius: 0 0 8px 8px;
+}
+.card-button:hover {
+  text-decoration: none;
+  background-color: #6b747e;
+  color: #fff;
+}
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
+  color: #fc6666;
+  font-weight: 600;
+}

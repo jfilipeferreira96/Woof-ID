@@ -1,4 +1,0 @@
-python -m pip install Pillow
-pip install django-countries
-
-https://codepen.io/creativetim/pen/mzVQrP

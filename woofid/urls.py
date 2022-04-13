@@ -12,6 +12,8 @@ urlpatterns = [
     path("profile", views.profile, name="profile"),
     path("authentication", views.authentication, name="authentication"),
     path("profile_keys", views.profile_keys, name="profile_keys"),
-    path("available_keys", views.available_keys, name="available_keys")
+    path("available_keys", views.available_keys, name="available_keys"),
+    path("edit_pet_profile/<int:pet_id>", views.edit_pet_profile, name="edit_pet_profile")
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

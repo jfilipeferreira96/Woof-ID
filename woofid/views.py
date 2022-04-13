@@ -6,9 +6,12 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import datetime
 import json
+from json import dumps
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import User, WoofTag, Pet
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 
@@ -32,15 +35,15 @@ def get_me_home(request):
 
 
     
-
+@csrf_exempt
 @login_required(login_url="/login")
 def profile(request):
     if request.method == "POST":
+        body = request.POST
 
-        body = json.loads(request.body.decode('utf-8'))
         try:
             #trying to save the form 
-            pet =Pet(pet_name=body['pet_name'], image=body['image'], owner=body['owners_name'], country=body['country'], zip_code= body['zip'], address=body['address'], phone=body['phone'], email=body['email'], additional=body['additional'], account=User.objects.get(pk=request.user.id))
+            pet =Pet(pet_name=body['pet_name'], image=request.FILES['image'], owner=body['owners_name'], country=body['country'], zip_code= body['zip'], address=body['address'], phone=body['phone'], email=body['email'], additional=body['additional'], account=User.objects.get(pk=request.user.id))
             pet.save()
 
             #associating the WOOFTAG/ID to the PET created
@@ -65,6 +68,39 @@ def profile(request):
         "user_pets": user_pets
 
     })
+
+@csrf_exempt
+@login_required(login_url="/login")
+def edit_pet_profile(request, pet_id):
+    #SENDS DATA THE PET DATA TO THE MODAL
+    if request.method == "GET":
+
+        woofid = WoofTag.objects.get(
+        pet=Pet.objects.get(pk=pet_id)).woofid
+
+        pet_to_edit=Pet.objects.get(pk=pet_id,
+        account=User.objects.get(pk=request.user.id))
+        
+        return JsonResponse({"message": "Success","woofid":woofid, "pet_to_edit":pet_to_edit.toJson()})
+
+    #SAVES THE POST FORM INSIDE OF THAT SAME MODAL
+    if request.method == "POST":
+
+        body = request.POST
+
+        try:
+            #trying to save the form 
+            Pet.objects.filter(pk=pet_id, account=User.objects.get(pk=request.user.id)).update(pet_name=body['pet_name'], owner=body['owners_name'], country=body['country'], zip_code= body['zip'], address=body['address'], phone=body['phone'], email=body['email'], additional=body['additional'])
+
+            image_update = Pet.objects.get(pk=pet_id)
+            image_update.image = request.FILES['image']
+            image_update.save()
+
+            return JsonResponse({"message": "Success"}, status=201)
+        except Pet.DoesNotExist:
+            return JsonResponse({"message": "Error"})
+
+
 
 @login_required(login_url="/login")
 def profile_keys(request):

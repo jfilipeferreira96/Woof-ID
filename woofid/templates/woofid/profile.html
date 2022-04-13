@@ -60,42 +60,40 @@
         </section>
 
           <!-- Pets profile section-->
-          <div class="row mt-140" id="profiles_row">
-            {% for pet in user_pets %}
+          {% if user_pets %}
+            <h1 class="mt-30">Your Pets Profiles</h1>
+            <hr>
+          {% endif %}
+          <div class="row mb-30" id="profiles_row">
             <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-4 col-xs-12">
-                  <div class="testimonial-active">
-                    <div class="testimonial-wrapper">
-                      <div class="single-testimonial">
-                        <div class="section-title text-center">
-                          <div class="round-profile">
-                          <img src="{% static 'woofid/media/' %}{{pet.image}}.jpg" alt="Circle Image Pet" class="pet-image rounded-circle img-fluid">
-                          </div>
-                        <div class="info">
-                          <h4 id="pets_name">{{pet.pet_name}}</h4>
-                          <div class="text-center content mt-3">
-                            <p><i class="fas fa-user-alt mx-2"></i>{{pet.owner}}</p>
-                            <p><i class="fa fa-phone mx-2"></i>{{pet.phone}}</p>
-                            <p><i class="fa fa-envelope mx-2"></i>{{pet.email}}</p>
-                            <p><i class="fa fa-map-marker-alt mx-2"></i>{{pet.address}} - {{pet.zip_code}}, {{pet.country}}</p>
-                            <p class="">{{pet.additional}}</p>
-                          </div>
-                        </div>
-                      </div>
+              {% for pet in user_pets %}
+              <div class="col-md-3 col-xs-12 d-flex align-items-stretch mb-5">
+                <div class="card-sl">
+                  <div class="card-image">
+                      <img src="{% static '' %}{{pet.image}}">
+                  </div>
+                  <div class="info text-center">
+                    <h4 id="pets_name" class="mt-2">{{pet.pet_name}}</h4>
+                    <div class="text-center content mt-3">
+                      <p><i class="fas fa-user-alt mx-2"></i>{{pet.owner}}</p>
+                      <p><i class="fa fa-phone mx-2"></i>{{pet.phone}}</p>
+                      <p><i class="fa fa-envelope mx-2"></i>{{pet.email}}</p>
+                      <p><i class="fa fa-map-marker-alt mx-2"></i>{{pet.address}} - {{pet.zip_code}}, {{pet.country.name}}</p>
+                      <p class="">{{pet.additional}}</p>
                     </div>
+                    <button class="btn btn-outline-soft mt-2 mb-2" id="edit_pet" data-id="{{pet.id}}" onclick="profile_edit({{pet.id}})">Edit Profile</button>
                   </div>
                 </div>
               </div>
-            </div>
             {% empty %}
             <div class="text-center">
               <h1>It seems like you have<span> no pets.</span></h1>
             </div>
             {% endfor %}
+            </div>
           </div>
-
         </div>
-      </div>
+      </div><!--end-->
       <!-- Modal createPetModal-->
       <div class="modal fade" id="createPetModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -144,7 +142,7 @@
                       <select class="form-select"  id="country"  name="country"  required>
                         <option value="" disabled selected>Select your country</option>
                         {% for country in countries %}
-                            <option value="{{ country.name }}">{{ country.name }}</option>
+                            <option value="{{ country.code }}">{{ country.name }}</option>
                         {% endfor %}
                       </select>
                     </div>
@@ -194,6 +192,102 @@
         </div>
       </div>
       <!-- end createPetModal-->
+      <!-- Modal editPetModal-->
+      <div class="modal fade" id="editPetModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Profile Edit</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="edit_form" data-id="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Pet Name</label>
+                    <div class="col-sm-9">
+                      <input type="text" autocomplete="off" class="form-control" id="petNameEdit" name="petNameEdit" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Pet Photo</label>
+                    <div class="col-sm-9">
+                       <input type="file" class="form-control-file" id="photoUploadEdit" name="photoUploadEdit" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Woof ID</label>
+                    <div class="col-sm-9">
+                      <input type="text" autocomplete="off" class="form-control" id="woof_not_activated_edit" name="woof_not_activated_edit"  required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Owners Name</label>
+                    <div class="col-sm-9">
+                      <input type="text" autocomplete="off" class="form-control" id="ownerNameEdit"  name="ownerNameEdit" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Country</label>
+                    <div class="col-sm-9">
+                      {% get_countries as countries %}
+                      <select class="form-select"  id="countryEdit"  name="countryEdit"  required>
+                        <option value="" disabled selected>Select your country</option>
+                        {% for country in countries %}
+                            <option value="{{ country.code }}">{{ country.name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Zip/Postal Code</label>
+                    <div class="col-sm-9">
+                      <input type="text" autocomplete="off" class="form-control" id="zipEdit"  name="zipEdit"  required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Street Address</label>
+                    <div class="col-sm-9">
+                      <input type="text" autocomplete="off" class="form-control" id="addressEdit"  name="addressEdit"  required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Phone Number</label>
+                    <div class="col-sm-9">
+                      <input type="text" autocomplete="off" class="form-control" id="phoneNumberEdit"  maxlength="14" name="phoneNumberEdit"  required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-3 col-form-label">Email address</label>
+                    <div class="col-sm-9">
+                      <input type="email" class="form-control" id="emailEdit" name="emailEdit" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mt-2">
+                    <label class="col-sm-12 col-form-label">Information</label>
+                    <div class="col-sm-12">
+                      <textarea id="addInformationEdit" autocomplete="off" cols="10" rows="5" placeholder="Addiotional information" name="addInformationEdit" class="form-control" style="min-width: 100%"></textarea>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-main text-white">Edit</button>
+                    <button type="button" class="btn btn-outline-soft" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </form>
+          </div>
+        </div>
+      </div>
+      <!-- end editPetModal-->
       <!-- Modal checkYourIDsModal -->
       <div class="modal fade" id="checkYourIDsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">

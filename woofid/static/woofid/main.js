@@ -1,9 +1,11 @@
 if (document.getElementById('profile_page') != null) {
     const createPetModal = new bootstrap.Modal(document.getElementById('createPetModal'));
+    const editPetModal = new bootstrap.Modal(document.getElementById('editPetModal'));
     const createPetBtn = document.getElementById('create_pet');
     const checkYourIDsModal = new bootstrap.Modal(document.getElementById('checkYourIDsModal'));
     const checkYourIDsBtn = document.getElementById('yours_ids');
-    const form = document.querySelector('form');
+    const form = document.querySelector('#submit_form');
+    const edit_form = document.querySelector('#edit_form');
 
     //open the create pet modal
     createPetBtn.addEventListener('click', (e) => {
@@ -97,27 +99,23 @@ if (document.getElementById('profile_page') != null) {
 
    
     const create_profile = async () => {
-        console.log(document.getElementById('photoUpload').files[0]);
-        console.log(document.getElementById('photoUpload').files);
-        console.log(JSON.stringify({ 'teste': document.getElementById('photoUpload').files[0] }));
+
+        let formData = new FormData();
+        formData.append('pet_name', document.getElementById('petName').value);
+        formData.append('image',document.getElementById('photoUpload').files[0]);
+        formData.append('woofid', document.getElementById('woof_not_activated').value);
+        formData.append('owners_name', document.getElementById('ownerName').value);
+        formData.append('country', document.getElementById('country').value);
+        formData.append('zip', document.getElementById('zip').value);
+        formData.append('address', document.getElementById('address').value);
+        formData.append('phone', document.getElementById('phoneNumber').value);
+        formData.append('email', document.getElementById('email').value);
+        formData.append('additional', document.getElementById('addInformation').value);
+
         try {
             const response = await fetch('/profile', {
                 method: 'POST',
-                headers: {
-                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: ({
-                    "pet_name": document.getElementById('petName').value,
-                    "image": document.getElementById('photoUpload').files[0],
-                    "woofid": document.getElementById('woof_not_activated').value,
-                    "owners_name": document.getElementById('ownerName').value,
-                    "country": document.getElementById('country').value,
-                    "zip": document.getElementById('zip').value,
-                    "address": document.getElementById('address').value,
-                    "phone": document.getElementById('phoneNumber').value,
-                    "email": document.getElementById('email').value,
-                    "additional": document.getElementById('addInformation').value
-                })
+                body: formData
                
             });
             const data = await response.json();
@@ -128,7 +126,7 @@ if (document.getElementById('profile_page') != null) {
                 //toast bootstrap handling... 
                 const toastEl = document.getElementById('toast-success');
                 const toast_success = new bootstrap.Toast(toastEl, []);
-                document.querySelector('.toast-success-content').textContent = 'Your Woof ID is now activated!';
+                document.querySelector('.toast-success-content').textContent = 'Profile was created!';
                 toast_success.show();
 
                 createPetModal.hide();
@@ -146,6 +144,114 @@ if (document.getElementById('profile_page') != null) {
         } 
     }
     
+    /* #########
+        PROFILE EDIT
+    ########### */
+
+    function profile_edit(profile_id) {
+        async_profile_edit(profile_id);
+    } 
+
+    const async_profile_edit = async (profile_id) => {
+
+        try {
+            const response = await fetch(`/edit_pet_profile/${profile_id}`, {
+                method: 'GET',
+            });
+            
+            const data = await response.json();
+            
+            console.log(data);
+           
+            if (data.message == 'Success') {
+                let info = JSON.parse(data.pet_to_edit);
+                //console.log(info);
+
+                //fills the inputs with the recived data
+                document.getElementById('petNameEdit').value = info.pet_name;
+                document.getElementById('woof_not_activated_edit').value = data.woofid;
+                document.getElementById('woof_not_activated_edit').disabled = true;
+                document.getElementById('ownerNameEdit').value = info.owner;
+                document.getElementById('countryEdit').value = info.country;
+                document.getElementById('zipEdit').value = info.zip_code;
+                document.getElementById('addressEdit').value = info.address;
+                document.getElementById('phoneNumberEdit').value = info.phone;
+                document.getElementById('emailEdit').value = info.email;
+                document.getElementById('addInformationEdit').value = info.additional;
+
+                //sets the id atritube on the form and opens up the modal
+                edit_form.setAttribute('data-id', profile_id);
+                editPetModal.show();
+            } else {
+                //toast bootstrap handling...
+                const toastEl = document.getElementById('toast-error');
+                const toast_error = new bootstrap.Toast(toastEl, []);
+                document.querySelector('.toast-error-content').textContent = 'Opps, something went wrong.';
+                toast_error.show();
+            }
+            
+        }catch(error) {
+            console.log(error)
+        }
+    }
+
+    edit_form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        edit_profile(edit_form.getAttribute('data-id'));
+    });
+
+
+
+    const edit_profile = async (profile_id) => {
+        
+        //Poderia ainda fazer uma validação e limpeza dos inputs tanto no backend como no frontend...
+        let formData = new FormData();
+        formData.append('pet_name', document.getElementById('petNameEdit').value);
+        formData.append('image',document.getElementById('photoUploadEdit').files[0]);
+        formData.append('woofid', document.getElementById('woof_not_activated_edit').value);
+        formData.append('owners_name', document.getElementById('ownerNameEdit').value);
+        formData.append('country', document.getElementById('countryEdit').value);
+        formData.append('zip', document.getElementById('zipEdit').value);
+        formData.append('address', document.getElementById('addressEdit').value);
+        formData.append('phone', document.getElementById('phoneNumberEdit').value);
+        formData.append('email', document.getElementById('emailEdit').value);
+        formData.append('additional', document.getElementById('addInformationEdit').value);
+
+        try {
+            const response = await fetch(`edit_pet_profile/${profile_id}`, {
+                method: 'POST',
+                body: formData
+               
+            });
+            const data = await response.json();
+            
+            console.log(data);
+        
+            if (data.message == 'Success') {
+                //toast bootstrap handling... 
+                const toastEl = document.getElementById('toast-success');
+                const toast_success = new bootstrap.Toast(toastEl, []);
+                document.querySelector('.toast-success-content').textContent = 'Success!';
+                toast_success.show();
+
+                editPetModal.hide();
+                
+            } else {
+                //toast bootstrap handling...
+                const toastEl = document.getElementById('toast-error');
+                const toast_error = new bootstrap.Toast(toastEl, []);
+                document.querySelector('.toast-error-content').textContent = 'Opps, something went wrong.';
+                toast_error.show();
+            }
+
+        }catch(error) {
+            console.log(error)
+        } 
+    }
+
+
+
 }
 if (document.getElementById('auth_page') != null) {
     const form = document.querySelector('form');
@@ -242,11 +348,13 @@ if (document.getElementById('getmehome') != null) {
                 document.getElementById('getmehome').style = "min-height: 50vh;"
                 document.getElementById('info').classList.remove('d-none');
 
+                //<img src="${document.location.origin}/static/${info.image}" alt="Circle Image Pet" class="pet-image rounded-circle img-fluid">
+
                 //creating the html 
                 let html_card = `
                     <div class="section-title text-center">
                       <div class="round-profile">
-                      <img src="${document.location.origin}/static/${info.image}" alt="Circle Image Pet" class="pet-image rounded-circle img-fluid">
+                      <img src="${document.location.origin}/static/${info.image}" alt="Circle Image Pet" class="rounded mx-auto d-block img-fluid">
                     </div>
                     <div class="info">
                       <h4 id="pets_name">${info.pet_name}</h4>
