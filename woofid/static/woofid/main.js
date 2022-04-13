@@ -129,8 +129,41 @@ if (document.getElementById('profile_page') != null) {
                 document.querySelector('.toast-success-content').textContent = 'Profile was created!';
                 toast_success.show();
 
+                //adding the html of the created profile
+                let html = `<div class="col-md-3 col-xs-12 d-flex align-items-stretch mb-5" id="{{pet.id}}">
+                            <div class="card-sl">
+                                <div class="card-image">
+                                    <img src="/static/media/${formData.get('image').name}">
+                                </div>
+                                <div class="info text-center">
+                                    <h4 id="pets_name" class="mt-2">${formData.get('pet_name')}</h4>
+                                    <div class="text-center content mt-3">
+                                    <p><i class="fas fa-user-alt mx-2"></i>${formData.get('owners_name')}</p>
+                                    <p><i class="fa fa-phone mx-2"></i>${formData.get('phone')}</p>
+                                    <p><i class="fa fa-envelope mx-2"></i>${formData.get('email')}</p>
+                                    <p><i class="fa fa-map-marker-alt mx-2"></i>${formData.get('address')} - ${formData.get('zip')}, ${formData.get('country')}</p>
+                                    <p class="">${formData.get('additional')}</p>
+                                </div>
+                                <button class="btn btn-outline-soft mt-2 mb-2" id="edit_pet" data-id="${data.pet_id}" onclick="profile_edit(${data.pet_id})">Edit Profile</button>
+                            </div>
+                        </div>`;
+                //if this is the first profile we have to hide the no_pets div
+                if (document.getElementById('no_pets') != null) {
+
+                    document.getElementById('no_pets').classList.add('d-none');
+                    document.getElementById('profiles_row').innerHTML = html;
+                    
+                } else {
+                    document.getElementById('profiles_row').insertAdjacentHTML('beforeend', html);
+                }
+
+                //increasing the counter
+                let num = document.getElementById('num_profiles').textContent;
+                let num2 = Number(num) + 1;
+                document.getElementById('num_profiles').textContent = num2;
+
                 createPetModal.hide();
-                
+
             } else {
                 //toast bootstrap handling...
                 const toastEl = document.getElementById('toast-error');
@@ -217,6 +250,7 @@ if (document.getElementById('profile_page') != null) {
         formData.append('phone', document.getElementById('phoneNumberEdit').value);
         formData.append('email', document.getElementById('emailEdit').value);
         formData.append('additional', document.getElementById('addInformationEdit').value);
+        console.log(formData.get('image'));
 
         try {
             const response = await fetch(`edit_pet_profile/${profile_id}`, {
@@ -236,6 +270,27 @@ if (document.getElementById('profile_page') != null) {
                 toast_success.show();
 
                 editPetModal.hide();
+
+                console.log(formData.get('image').name);
+                //changing the html of the edited profile
+                let div = document.getElementById(profile_id);
+                div.innerHTML = 
+                `
+                <div class="card-sl">
+                  <div class="card-image">
+                      <img src="/static/media/${formData.get('image').name}">
+                  </div>
+                  <div class="info text-center">
+                    <h4 id="pets_name" class="mt-2">${formData.get('pet_name')}</h4>
+                    <div class="text-center content mt-3">
+                      <p><i class="fas fa-user-alt mx-2"></i>${formData.get('owners_name')}</p>
+                      <p><i class="fa fa-phone mx-2"></i>${formData.get('phone')}</p>
+                      <p><i class="fa fa-envelope mx-2"></i>${formData.get('email')}</p>
+                      <p><i class="fa fa-map-marker-alt mx-2"></i>${formData.get('address')} - ${formData.get('zip')}, ${formData.get('country')}</p>
+                      <p class="">${formData.get('additional')}</p>
+                    </div>
+                    <button class="btn btn-outline-soft mt-2 mb-2" id="edit_pet" data-id="${profile_id}" onclick="profile_edit(${profile_id})">Edit Profile</button>
+                </div>`;
                 
             } else {
                 //toast bootstrap handling...

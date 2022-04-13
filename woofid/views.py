@@ -49,7 +49,10 @@ def profile(request):
             #associating the WOOFTAG/ID to the PET created
             WoofTag.objects.filter(woofid__iexact=body['woofid'], user=User.objects.get(pk=request.user.id)).update(pet=Pet.objects.filter(pet_name=body['pet_name']).order_by('-id')[0])
 
-            return JsonResponse({"message": "Success"}, status=201)
+            #id of the pet that created
+            pet_id = Pet.objects.get(pet_name=body['pet_name'], account=User.objects.get(pk=request.user.id)).id
+            print(pet_id)
+            return JsonResponse({"message": "Success", "pet_id":pet_id}, status=201)
         except Pet.DoesNotExist:
             return JsonResponse({"message": "Error"})
 
@@ -96,7 +99,7 @@ def edit_pet_profile(request, pet_id):
             image_update.image = request.FILES['image']
             image_update.save()
 
-            return JsonResponse({"message": "Success"}, status=201)
+            return JsonResponse({"message": "Success"}, status=200)
         except Pet.DoesNotExist:
             return JsonResponse({"message": "Error"})
 

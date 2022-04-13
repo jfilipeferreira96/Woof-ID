@@ -60,14 +60,12 @@
         </section>
 
           <!-- Pets profile section-->
-          {% if user_pets %}
-            <h1 class="mt-30">Your Pets Profiles</h1>
-            <hr>
-          {% endif %}
-          <div class="row mb-30" id="profiles_row">
-            <div class="row justify-content-center">
+          <h1 class="mt-30">Your Pets Profiles</h1>
+          <hr>
+          <div class="row mb-30">
+            <div class="row justify-content-center" id="profiles_row">
               {% for pet in user_pets %}
-              <div class="col-md-3 col-xs-12 d-flex align-items-stretch mb-5">
+              <div class="col-md-3 col-xs-12 d-flex align-items-stretch mb-5" id="{{pet.id}}">
                 <div class="card-sl">
                   <div class="card-image">
                       <img src="{% static '' %}{{pet.image}}">
@@ -86,7 +84,7 @@
                 </div>
               </div>
             {% empty %}
-            <div class="text-center">
+            <div class="text-center mt-50" id="no_pets">
               <h1>It seems like you have<span> no pets.</span></h1>
             </div>
             {% endfor %}
