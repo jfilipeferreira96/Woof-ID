@@ -1,6 +1,6 @@
-# [Final Project - CS 50 Web] (https://cs50.harvard.edu/web/2020/projects/final/capstone/)
+# [Final Project - CS 50 Web](https://cs50.harvard.edu/web/2020/projects/final/capstone/)
 
-#### Installation
+### Installation
 
 - Install project dependencies by running `pip install -r requirements.txt`. Dependencies include Django, Django-Countries and Pillow that allows Django to work with images.
 - Make and apply migrations by running `python manage.py makemigrations` and `python manage.py migrate`.
